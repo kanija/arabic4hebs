@@ -1,4 +1,4 @@
-﻿<!--#include file="inc/inc.asp"-->
+<!--#include file="inc/inc.asp"-->
 <!DOCTYPE html>
 <html style="height:100%;">
 <head>
