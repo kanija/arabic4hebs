@@ -1,4 +1,4 @@
-﻿<!--#include file="inc/inc.asp"--><%
+<!--#include file="inc/inc.asp"--><%
 
 dim wordId, countMe, spacer, show, status, imgLink, imgCredit
 dim	partsOfSpeach,pos,genders,gen,numbers,nums
