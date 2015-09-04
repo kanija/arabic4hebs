@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html style="height:100%;">
 <head>
-	<title>מילים עם סרטונים</title>
+	<title>סרטונים</title>
 	<meta name="Description" content="כל המילים שיש להם סירטון" />
 	<!--#include file="inc/header.asp"-->
     <style>
