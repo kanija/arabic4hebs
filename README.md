@@ -3,3 +3,4 @@
 
 * כתובת המילון : http://ronen.rothfarb.info/arabic
 * צרו קשר : arabic4hebs@gmail.com
+*
