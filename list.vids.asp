@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html style="height:100%;">
 <head>
-	<title>סרטונים</title>
+	<title>מילים עם סרטונים</title>
 	<meta name="Description" content="כל המילים שיש להם סירטון" />
 	<!--#include file="inc/header.asp"-->
     <style>
@@ -20,36 +20,32 @@
 </head>
 <body style="height:100%;">
 <!--#include file="inc/top.asp"-->
-<div id="pTitle">מילים עם סרטונים</div>
-<div id="center"><%
+<div id="pTitle">סרטונים</div>
+<div id="center">
+    <div>
+        <script src="https://apis.google.com/js/platform.js"></script>
+        <div class="g-ytsubscribe" data-channelid="UCHnLvw-TCwckLXmjYozv9tw" data-layout="default" data-count="default"></div>
+    </div><%
 dim countMe, lastLink
 lastLink = ""
 countMe = 0
 
 openDB "arabicWords"
-mySQL = "SELECT wordsLinks.description, wordsLinks.link, wordsLinks.wordID, words.arabicWord, words.hebrewTranslation, words.pronunciation, words.status, words.imgLink "&_
+
+mySQL = "SELECT DISTINCT wordsLinks.link, wordsLinks.content, wordsLinks.description, wordsLinks.wordID, words.arabicWord, words.hebrewTranslation, words.pronunciation, words.status, words.imgLink "&_
         "FROM words INNER JOIN wordsLinks ON words.id = wordsLinks.wordID "&_
         "WHERE (((wordsLinks.description)='YouTube Embed')) ORDER BY wordsLinks.link;"
+
+mySQL = "SELECT DISTINCT link,content FROM wordsLinks WHERE description='YouTube Embed' ORDER BY content;"
+
 res.open mySQL, con
     Do until res.EOF
             'if res("link")<>lastLink then %>
             <div class="listDiv">
-                <div style="padding:10px 0px;" onclick="location.href='word.asp?id=<%=res("wordID")%>'"><%
-                    if res("imgLink") <> false then %>
-                        <img src="img/site/photo.png" alt="לערך זה יש תמונה" title="לערך זה יש תמונה" class="img" /><%
-                    end if %>
+                <div style="padding:10px 0px;">
                     <span class="heb">
-		                <%=res("hebrewTranslation")%><%
-
-                        Select Case res("status")
-                            Case 1 %>
-                            <img src="img/site/correct.png" id="ערך זה נבדק ונמצא תקין" alt="ערך זה נבדק ונמצא תקין" title="ערך זה נבדק ונמצא תקין" style="width:20px;opacity:0.7;float:left;" /> <%
-                            Case -1 %>
-                            <img src="img/site/erroneous.png" id="ערך זה סומן כלא תקין" alt="ערך זה סומן כלא תקין" title="ערך זה סומן כלא תקין" style="width:20px;opacity:0.7;float:left;" /><%
-                        End Select  %>
+                        <%=res("content")%>
                     </span>
-                    <span class="arb"><%=res("arabicWord")%></span>
-                    <span class="eng"><%=res("pronunciation")%></span>
                 </div>
 
                 <div class="youtube" id="<%=res("link")%>"></div>
