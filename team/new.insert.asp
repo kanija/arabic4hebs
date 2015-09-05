@@ -5,7 +5,7 @@ Response.Write "TOP of code"
 If (session("role") and 2) = 0 then Response.Redirect "login.asp"
 
 Function getString (f)
-	getString = "'" &replace(request(f),"'","&#39;")&"'"
+	getString = "'" &replace(request(f),"'","''")&"'"
 End function
 
 Dim query,msg,maxId,myMail,cTime

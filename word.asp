@@ -113,7 +113,15 @@ res.close
     </script>
 </head>
 <body style="height:100%;">
-<!--#include file="inc/top.asp"-->
+<!--#include file="inc/top.asp"--><%
+
+'Check how the server is currently encoding responses.
+response.write "<br/>CHARSET = "
+Call Response.Write(Response.Charset)
+response.write "<br/> CODEPAGE = "
+Call Response.Write(Response.CodePage)
+%>
+
 <div class="tableWord" style="box-shadow:rgba(0,0,0,0.45) 2px 2px 22px -3px; margin-bottom:20px; font-size:150%;">
 	<div title="עברית" class="heb" style="border-bottom:solid 1px #cddbea; text-align:right; padding-right:5px; float:none;"><%=hebTrans%></div>
 	<div title="ערבית" class="arb" style="border-bottom:solid 1px #cddbea; text-align:center; height:38px; "><span id="arbWordSpan"><%=arabicWord%></span></div>

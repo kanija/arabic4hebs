@@ -1,36 +1,45 @@
-﻿<!--#include file="inc/inc.asp"-->
+<!--#include file="inc/inc.asp"-->
 <!-- Language="VBScript" CodePage="65001"-->
-<!-- Language="VBScript" CodePage="1255"--><%
+<!-- Language="VBScript" CodePage="1255"-->
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset='utf-8'>
+</head><%
+
 Response.Write "<br/>TOP of code<br/>"
 If (session("role") and 2) = 0 then Response.Redirect "login.asp"
 
-Function getString (f)
-	getString = "'" &replace(request(f),"'","&#39;")&"'"
-End function
 
-Dim wordID,query,msg,maxId,myMail
+Function getString (f)
+	getString = "'" &replace(f,"'","''")&"'"
+End function 
+
+
+
+Dim wordID,query,msg,myMail
 Dim actionDate,action,explain,errorTypes
 
 Dim arabicWord,searchString,hebrew,pronunciation
 Dim	partOfSpeach,gender,number,example,info,root
-Dim imgLink,imgCredit,youtube,status,labels,show
+Dim imgLink,imgCredit,status,labels,show
+Dim youtube,linkDesc,link
 
 Dim arabicWordOld,searchStringOld,hebrewOld,pronunciationOld
 Dim	partOfSpeachOld,genderOld,numberOld,exampleOld,infoOld,rootOld
-Dim imgLinkOld,imgCreditOld,youtubeOld,statusOld,labelsOld,showOld
+Dim imgLinkOld,imgCreditOld,statusOld,labelsOld,showOld
+Dim youtubeOld,linkDescOld,linkOld
 
 Const lblCnt = 21
 Dim labelsOldStr, labelsNewArr(),labelsNewStr
 redim labelsNewArr(lblCnt)
-'Dim label1,label2,label3,label4,label5,label6,label7,label8,label9,label10
-'Dim label11,label12,label13,label14,label16,label17,label18,label19,label20,label21
 
 openDB "arabicWords"
 
 wordID = request("id")
     response.write "<br/>wordID = "&wordID&"<br/>"
 
-explain = getString("explain")
+explain = getString(request("explain"))
 	response.write "<br/>explain = "&explain
 
 mySQL = "SELECT * FROM words WHERE id="&wordID
@@ -40,30 +49,46 @@ if res.EOF then
 	session("msg") = "res.EOF on query: "&query
 else
 	showOld = res("show")
-	arabicWordOld = "'" & res("arabicWord") & "'"
-	hebrewOld = "'" & res("hebrewTranslation") & "'"
-	pronunciationOld = "'" & res("pronunciation") & "'"
-	searchStringOld = "'" & res("searchString") & "'"
+	response.write "<br/> showOld = "&showOld
+	arabicWordOld = getString(res("arabicWord"))
+	response.write "<br/> arabicWordOld = "&arabicWordOld
+	response.write "<br/> arabicWordOld res = "&res("arabicWord")
+	hebrewOld = getString(res("hebrewTranslation"))
+	response.write "<br/>hebrewOld = "&left(hebrewOld,len(hebrewOld))
+	pronunciationOld = getString(res("pronunciation"))
+	response.write "<br/>pronunciationOld = "&pronunciationOld
+	searchStringOld = getString(res("searchString"))
+	response.write "<br/>searchStringOld = "&searchStringOld
 	partOfSpeachOld = res("partOfSpeach")
+	response.write "<br/>partOfSpeachOld = "&partOfSpeachOld
 	genderOld = res("gender")
+	response.write "<br/>genderOld = "&genderOld
 	numberOld = res("number")
-	exampleOld = "'" & res("example") & "'"
-	infoOld = "'" & res("info") & "'"
-	imgLinkOld = "'" & res("imgLink") & "'"
-	imgCreditOld = "'" & res("imgCredit") & "'"
+	response.write "<br/>numberOld = "&numberOld
+	if len(res("example"))>=0 then exampleOld = getString(res("example")) else exampleOld="''"
+	response.write "<br/>example = "&exampleOld
+	if len(res("info"))>=0 then	infoOld = getString(res("info")) else infoOld = "''"
+	response.write "<br/>infoOld = "&infoOld
+	if len(res("imgLink"))>=0 then imgLinkOld = getString(res("imgLink")) else imgLinkOld = "''"
+	response.write "<br/>imgLinkOld = "&imgLinkOld
+	if len(res("imgCredit"))>=0 then imgCreditOld = getString(res("imgCredit")) else imgCreditOld = "''"
+	response.write "<br/>imgCreditOld = "&imgCreditOld
 	statusOld = res("status")
-	'youtubeOld = res("youtube")
+	response.write "<br/>statusOld = "&statusOld
+	linkDescOld = "''" 'TEMP UNTIL linkHistory delt with in DB'
+	linkOld = "''" 'TEMP UNTIL linkHistory delt with in DB'
 	'labelsOld = res("labels")
 end if
 res.close
-
-hebrew = getString("hebrewTranslation")
+	response.write "<br/>CHECK POINT 1"
+	'response.end
+hebrew = getString(Request("hebrewTranslation"))
     response.write "<br/>hebrew = "&left(hebrew,len(hebrew))
 	response.write "<br/>hebrewOld = "&left(hebrewOld,len(hebrewOld))
-pronunciation = getString("pronunciation")
+pronunciation = getString(request("pronunciation"))
     response.write "<br/>pronunciation = "&pronunciation
 	response.write "<br/>pronunciationOld = "&pronunciationOld
-arabicWord = getString("arabicWord")
+arabicWord = getString(Request("arabicWord"))
     response.write "<br/>arabicWord = "&arabicWord
     response.write "<br/>arabicWordOld = "&arabicWordOld
 
@@ -76,19 +101,27 @@ gender = CLng(Request("gender"))
 number = CLng(Request("number"))
     response.write "<br/>number = "&number
 	response.write "<br/>numberOld = "&numberOld
-example = getString("example")
+example = getString(request("example"))
     response.write "<br/>example = "&example
 	response.write "<br/>exampleOld = "&exampleOld
-info = getString("info")
+info = getString(request("info"))
     response.write "<br/>info = "&info
 	response.write "<br/>infoOld = "&infoOld
-imgLink = getString("imgLink")
+imgLink = getString(request("imgLink"))
     response.write "<br/>imgLink = "&imgLink
 	response.write "<br/>imgLinkOld = "&imgLinkOld
-imgCredit = getString("imgCredit")
+imgCredit = getString(request("imgCredit"))
     response.write "<br/>imgCredit = "&imgCredit
 	response.write "<br/>imgCreditOld = "&imgCreditOld
-
+link = getString(request("youtube"))
+	response.write "<br/>link = "&link
+if link="" then 
+	linkDesc="" 
+else if link="''" then
+	linkDesc="" 
+else
+	linkDesc = "YouTube Embed"
+end if
 status = request("status")
 response.write "<br/>status = "&status
 response.write "<br/>statusOld = "&statusOld
@@ -98,19 +131,15 @@ show = request("show")
 	response.write "<br/>show = "&show
 	response.write "<br/>showOld = "&showOld
 
-
-
 Response.Write "<br/><br/>TEMP VALUES:<br/>"
 
 action = 4
 	response.write "<br/>action = "&action
 
 
-
-
 Response.Write "<br/><br/>LEAVE FOR NOW...:<br/>"
 
-searchString = Replace(Replace(Replace(getString("searchString"),",","|"),vbLf,"|"),vbCr,"")
+searchString = Replace(Replace(Replace(getString(Request("searchString")),",","|"),vbLf,"|"),vbCr,"")
 if len(searchString)>255 then
     response.write "<br/>len Before=" & len(searchString)
     response.write "<br/>string Before=" & searchString
@@ -130,27 +159,14 @@ root = "0"
 	response.write "<br/>root = "&root
 rootOld = "0"
 	response.write "<br/>rootOld = "&rootOld
-labels = "lablesTEST"
-	response.write "<br/>labels = "&labels
-labelsOld = "lablesOldTEST"
-	response.write "<br/>labelsOld = "&labelsOld
-	response.write "<br/>"
 
-youtube = request("youtube")
-if youtube = empty then
-    Response.Write "<br/>no youtube vid today"
-else
-    Response.Write "<br/>YEAY!! VIDEO!!"
-    youtube = getString("youtube")
-end if
-	response.write "<br/>youtubeOld = "&youtubeOld
 
 dim isFirst
 dim i
 labelsNewStr = ""
 isFirst=true
 for i=1 to lblCnt
-	labelsNewArr(i)=(getString("label"&cstr(i))="'on'")
+	labelsNewArr(i)=(getString(request("label"&cstr(i)))="'on'")
 	if isFirst then
 		if labelsNewArr(i) then
 			labelsNewStr = cstr(i)
@@ -187,7 +203,7 @@ response.write "<br/>labelsOldStr = " & labelsOldStr
 Set cmd=Server.CreateObject("adodb.command")
 
 'THIS query is missing video, labels and searchString:'
-query = "INSERT into history (word,actionDate,[action],statusOld,statusNew,[user],errorTypes,explain,showOld,showNew,hebrewOld,hebrewNew,arabicOld,arabicNew,pronunciationOld,pronunciationNew,searchStringOld,searchStringNew,rootOld,rootNew,partOfSpeachOld,partOfSpeachNew,genderOld,genderNew,numberOld,numberNew,infoOld,infoNew,exampleOld,exampleNew,imgLinkOld,imgLinkNew,imgCreditOld,imgCreditNew,labelsOld,labelsNew) VALUES ("&wordID&",now(),"&action&","&statusOld&","&status&","&session("userID")&",'"&errorTypes&"',"&explain&","&showOld&","&show&","&left(hebrewOld,len(hebrewOld))&","&left(hebrew,len(hebrew))&","&arabicWordOld&","&arabicWord&","&pronunciationOld&","&pronunciation&","&searchStringOld&","&searchString&","&rootOld&","&root&","&partOfSpeachOld&","&partOfSpeach&","&genderOld&","&gender&","&numberOld&","&number&","&infoOld&","&info&","&exampleOld&","&example&","&imgLinkOld&","&imgLink&","&imgCreditOld&","&imgCredit&",'"&labelsOldStr&"','"&labelsNewStr&"')"
+query = "INSERT into history (word,actionDate,[action],statusOld,statusNew,[user],errorTypes,explain,showOld,showNew,hebrewOld,hebrewNew,arabicOld,arabicNew,pronunciationOld,pronunciationNew,searchStringOld,searchStringNew,rootOld,rootNew,partOfSpeachOld,partOfSpeachNew,genderOld,genderNew,numberOld,numberNew,infoOld,infoNew,exampleOld,exampleNew,imgLinkOld,imgLinkNew,imgCreditOld,imgCreditNew,linkDescOld,linkDescNew,linkOld,linkNew,labelsOld,labelsNew) VALUES ("&wordID&",now(),"&action&","&statusOld&","&status&","&session("userID")&",'"&errorTypes&"',"&explain&","&showOld&","&show&","&left(hebrewOld,len(hebrewOld))&","&left(hebrew,len(hebrew))&","&arabicWordOld&","&arabicWord&","&pronunciationOld&","&pronunciation&","&searchStringOld&","&searchString&","&rootOld&","&root&","&partOfSpeachOld&","&partOfSpeach&","&genderOld&","&gender&","&numberOld&","&number&","&infoOld&","&info&","&exampleOld&","&example&","&imgLinkOld&","&imgLink&","&imgCreditOld&","&imgCredit&","&linkDescOld&",'"&linkDesc&"',"&linkOld&","&link&",'"&labelsOldStr&"','"&labelsNewStr&"')"
 
 cmd.CommandType=1
 cmd.CommandText=query
@@ -219,32 +235,30 @@ for i=1 to lblCnt
 	end if
 next
 
-session("msg") = "העריכה התבצעה בהצלחה"
-response.Redirect "history.asp"
-Response.End
-
-query = "SELECT MAX(id) FROM words"
-Set res = con.Execute (query)
-maxId = res(0)
-
-if len(youtube)=0 then 
-    response.write "<br/>len(youtube)=0"
+if len(link)=0 then
+    'response.write "<br/>link="&link
+elseif link="''" then 
+    'response.write "<br/>link="&link
 else
-	query = "INSERT INTO wordsLinks (wordID, description, link) VALUES (" & maxId & ",'YouTube Embed',"&youtube&")"
+	query = "INSERT INTO wordsLinks (wordID, description, link) VALUES (" & wordId & ",'"&linkDesc&"',"&link&")"
     Response.Write "<br/>" & query
-    Response.end
+    'Response.end
 	cmd.CommandText=query
 	cmd.execute ,,128
 end if
 
-response.write "<br/>Start OF labels"
-
-
 closeDB
+
+session("msg") = "העריכה התבצעה בהצלחה"
+response.Redirect "history.asp"
+
+
+
 
 session("msg") = "המילה <a href=""http://ronen.rothfarb.info/arabic/word.asp?id=" & maxId & """><span class=""nikud"">" & arabicWord & "</span></a> נוספה למילון בהצלחה"
 
 response.write "<br/>END OF INSERT"
 'response.end
-Response.Redirect "send_email.php?wordID="&maxId&"&arabic="&arabicWord
+'Response.Redirect "send_email.php?wordID="&maxId&"&arabic="&arabicWord
+end if
 %>

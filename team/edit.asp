@@ -198,12 +198,23 @@ wordID = request("ID")
                         <div><input type="text" dir="ltr" value="<%=res("imgLink")%>" name="imgLink" style="width:95%;" placeholder="link" maxlength="254" /></div>
                         <span>חובה לשים קרדיט בהתאם לדרישות בעל הזכויות</span>
                         <div><input type="text" dir="ltr" value="<%=res("imgCredit")%>" name="imgCredit" style="width:95%;" placeholder="credit" maxlength="254" /></div>
-                    </div>
-                    <div class="boxSub disabled">
-                        <div>קישור לסרטון יו-טיוב</div>
-                        <span>הדביקו את קוד הסרטון בלבד (ללא כתובת האתר). שימו לב כי לא כל סרטון ביו-טיוב ניתן להטמיע באתרים חיצונים, לכן ודאו שמופיע מתחת לסרטון האופציה להטמעה - Embed</span>
-                        <div style="font-size: small; padding: 14px;text-align: center;" dir="ltr">www.youtube.com/watch?v=<input type="text" dir="ltr" name="youtube" maxlength="255" disabled /></div>
-                    </div>
+                    </div><%
+                    if session("userID")=1 then 
+                        mySQL = "SELECT * FROM wordsLinks WHERE wordID="&wordID
+                        res2.open mySQL
+                        if res2.EOF then %>
+                            <div class="boxSub">
+                                <div>קישור לסרטון יו-טיוב</div>
+                                <span>הדביקו את קוד הסרטון בלבד (ללא כתובת האתר). שימו לב כי לא כל סרטון ביו-טיוב ניתן להטמיע באתרים חיצונים, לכן ודאו שמופיע מתחת לסרטון האופציה להטמעה - Embed</span>
+                                <div style="font-size: small; padding: 14px;text-align: center;" dir="ltr">www.youtube.com/watch?v=<input type="text" dir="ltr" name="youtube" maxlength="255" /></div>
+                            </div><%
+                        else %>
+                            <div class="boxSub">
+                                [SHOW VIDEOS]
+                            </div> <%
+                        end if
+                        res2.close
+                    end if %>
                 </div>
                 <div style="text-align: center;">
                     <table class="trans">
